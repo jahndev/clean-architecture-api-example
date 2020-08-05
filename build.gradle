@@ -1,0 +1,26 @@
+allprojects {
+  group 'co.com.cleanarchitecture'
+  version '1.0-SNAPSHOT'
+
+  repositories {
+    mavenCentral()
+  }
+}
+
+subprojects {
+  ext {
+    lombokVersion = '1.18.12'
+    junitVersion = '4.12'
+  }
+
+  apply plugin: 'java'
+
+  dependencies {
+    compileOnly("org.projectlombok:lombok:${lombokVersion}")
+    annotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+
+    testCompile group: 'junit', name: 'junit', version: "${junitVersion}"
+    testCompileOnly("org.projectlombok:lombok:${lombokVersion}")
+    testAnnotationProcessor("org.projectlombok:lombok:${lombokVersion}")
+  }
+}

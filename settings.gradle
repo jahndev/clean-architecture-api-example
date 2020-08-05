@@ -1,0 +1,4 @@
+rootProject.name = 'cleanarchitecture'
+include 'Domain'
+include 'Infrastructure'
+
