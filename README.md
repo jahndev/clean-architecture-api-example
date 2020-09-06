@@ -1,5 +1,5 @@
 ## Accounting notebook
-#### simple test for AgileEngine
+#### simple example of gradle + spring boot + lombok and jakarta javax persistence
 #### author: Jahn C.A.
 ## Build
 $ ./gradlew build
