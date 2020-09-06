@@ -14,6 +14,8 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static co.com.taskmanagement.infrastructure.transaction.TransactionAdapter.toTransactionResponseDTO;
+
 @RestController
 @RequestMapping("/transaction")
 @AllArgsConstructor
@@ -26,10 +28,10 @@ public class TransactionController {
     @GetMapping("/{id}")
     public ResponseEntity<TransactionResponseDTO> getTransactionById(@PathVariable @NotNull Long id) {
         Transaction transaction = transactionInputPort.getTransactionById(id);
-        if(transaction.isEmpty()) {
+        if (transaction.isEmpty()) {
             return ResponseEntity.notFound().build();
         }
-        return ResponseEntity.ok().body(transactionAdapter.toTransactionResponseDTO(transaction));
+        return ResponseEntity.ok().body(toTransactionResponseDTO(transaction));
     }
 
     @GetMapping("/")
@@ -52,7 +54,7 @@ public class TransactionController {
                 transactionInputPort.createTransaction(
                         transactionAdapter.toTransaction(requestBody));
         TransactionResponseDTO transactionResponseDTO =
-                transactionAdapter.toTransactionResponseDTO(transaction);
+                toTransactionResponseDTO(transaction);
 
         return ResponseEntity
                 .created(URIManager.of().createURIFromPath("/{id}", transactionResponseDTO.getId()))
@@ -62,10 +64,10 @@ public class TransactionController {
     private boolean isInvalidAmount(TransactionRequestDTO requestBody, Double amount) {
         String type = requestBody.getType().toUpperCase();
         boolean isInvalid;
-            isInvalid = amount.doubleValue() <= 0
-                    || Arrays.stream(TransactionType.values()).noneMatch(t -> type.equals(t.name()))
-                    || (TransactionType.DEBIT.equals(TransactionType.valueOf(type))
-                    && transactionInputPort.getTotalAmount().compareTo(BigDecimal.valueOf(amount)) < 0);
+        isInvalid = amount.doubleValue() <= 0
+                || Arrays.stream(TransactionType.values()).noneMatch(t -> type.equals(t.name()))
+                || (TransactionType.DEBIT.equals(TransactionType.valueOf(type))
+                && transactionInputPort.getTotalAmount().compareTo(BigDecimal.valueOf(amount)) < 0);
 
         return isInvalid;
     }

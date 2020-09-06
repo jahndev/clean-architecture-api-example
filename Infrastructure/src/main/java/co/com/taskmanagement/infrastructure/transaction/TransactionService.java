@@ -10,6 +10,7 @@ import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import static co.com.taskmanagement.domain.transaction.TransactionType.CREDIT;
+import static co.com.taskmanagement.infrastructure.transaction.TransactionAdapter.transactionEntityToTransaction;
 
 @Service
 public class TransactionService implements TransactionOutputPort {
@@ -26,7 +27,7 @@ public class TransactionService implements TransactionOutputPort {
     @Override
     public Transaction findTransactionById(Long boardId) {
         TransactionEntity transactionEntity = transactionRepository.findById(boardId).orElse(TransactionEntity.builder().build());
-        return transactionAdapter.transactionEntityToTransaction(transactionEntity);
+        return transactionEntityToTransaction(transactionEntity);
     }
 
     @Override
@@ -48,7 +49,7 @@ public class TransactionService implements TransactionOutputPort {
         TransactionEntity transactionEntityToSave = TransactionAdapter.toTransactionEntity(transaction);
         TransactionEntity savedTransactionEntity = transactionRepository.save(transactionEntityToSave);
         updateTotalAmount(savedTransactionEntity);
-        return TransactionAdapter.transactionEntityToTransaction(savedTransactionEntity);
+        return transactionEntityToTransaction(savedTransactionEntity);
     }
 
     private void updateTotalAmount(TransactionEntity savedTransactionEntity) {

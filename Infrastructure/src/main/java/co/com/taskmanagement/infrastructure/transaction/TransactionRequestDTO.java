@@ -1,6 +1,5 @@
 package co.com.taskmanagement.infrastructure.transaction;
 
-import co.com.taskmanagement.domain.transaction.TransactionType;
 import lombok.Builder;
 import lombok.Data;
 
